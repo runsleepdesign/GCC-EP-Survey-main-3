@@ -420,45 +420,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 // Neutral color for results maps — all countries same teal, no green/red yet
 const CR='#2a7a8a'; // neutral surveyed color
 
-// ── COUNTRY EP DATA FOR TOOLTIPS ──────────────────────────────────────────
-const countryEPData = {
-  "Angola": { pop: 37.9, ablatingEPs: 0, deviceEPs: 12, ablationRatio: "N/A", deviceRatio: "3.2M/EP", ablationCenters: 0, deviceCenters: 4, visitingEP: "No", lastUpdated: "Apr 7, 2026" },
-  "Benin": { pop: 13.7, ablatingEPs: 1, deviceEPs: 2, ablationRatio: "13.7M/EP", deviceRatio: "6.8M/EP", ablationCenters: 1, deviceCenters: 1, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Botswana": { pop: 2.8, ablatingEPs: 0, deviceEPs: 3, ablationRatio: "N/A", deviceRatio: "0.9M/EP", ablationCenters: 0, deviceCenters: 2, visitingEP: "No", lastUpdated: "Apr 7, 2026" },
-  "Burundi": { pop: 13.2, ablatingEPs: 0, deviceEPs: 0, ablationRatio: "N/A", deviceRatio: "N/A", ablationCenters: 0, deviceCenters: 0, visitingEP: "No", lastUpdated: "Apr 7, 2026" },
-  "Cambodia": { pop: 17.4, ablatingEPs: 6, deviceEPs: 11, ablationRatio: "2.9M/EP", deviceRatio: "1.6M/EP", ablationCenters: 3, deviceCenters: 4, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Cameroon": { pop: 28.6, ablatingEPs: 3, deviceEPs: 10, ablationRatio: "9.5M/EP", deviceRatio: "2.9M/EP", ablationCenters: 1, deviceCenters: 5, visitingEP: "No", lastUpdated: "Apr 7, 2026" },
-  "Chad": { pop: 18.5, ablatingEPs: 0, deviceEPs: 0, ablationRatio: "N/A", deviceRatio: "N/A", ablationCenters: 0, deviceCenters: 0, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Congo (Brazzaville)": { pop: 6.1, ablatingEPs: 0, deviceEPs: 2, ablationRatio: "N/A", deviceRatio: "3.0M/EP", ablationCenters: 0, deviceCenters: 3, visitingEP: "No", lastUpdated: "Apr 7, 2026" },
-  "Egypt": { pop: 106.5, ablatingEPs: 100, deviceEPs: 120, ablationRatio: "1.1M/EP", deviceRatio: "0.9M/EP", ablationCenters: 90, deviceCenters: 100, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Equatorial Guinea": { pop: 1.8, ablatingEPs: 0, deviceEPs: 2, ablationRatio: "N/A", deviceRatio: "0.9M/EP", ablationCenters: 0, deviceCenters: 1, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Ethiopia": { pop: 128.7, ablatingEPs: 0, deviceEPs: 8, ablationRatio: "N/A", deviceRatio: "16.1M/EP", ablationCenters: 0, deviceCenters: 4, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Gabon": { pop: 2.5, ablatingEPs: 0, deviceEPs: 5, ablationRatio: "N/A", deviceRatio: "0.5M/EP", ablationCenters: 0, deviceCenters: 3, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Gambia": { pop: 2.8, ablatingEPs: 0, deviceEPs: 0, ablationRatio: "N/A", deviceRatio: "N/A", ablationCenters: 0, deviceCenters: 1, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Ghana": { pop: 34.1, ablatingEPs: 0, deviceEPs: 8, ablationRatio: "N/A", deviceRatio: "4.3M/EP", ablationCenters: 0, deviceCenters: 3, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Kenya": { pop: 56.4, ablatingEPs: 1, deviceEPs: 35, ablationRatio: "56.4M/EP", deviceRatio: "1.6M/EP", ablationCenters: 4, deviceCenters: 16, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Liberia": { pop: 5.5, ablatingEPs: 0, deviceEPs: 0, ablationRatio: "N/A", deviceRatio: "N/A", ablationCenters: 0, deviceCenters: 0, visitingEP: "No", lastUpdated: "Apr 7, 2026" },
-  "Libya": { pop: 7.4, ablatingEPs: 0, deviceEPs: 30, ablationRatio: "N/A", deviceRatio: "0.2M/EP", ablationCenters: 4, deviceCenters: 20, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Mali": { pop: 24.5, ablatingEPs: 0, deviceEPs: 5, ablationRatio: "N/A", deviceRatio: "4.9M/EP", ablationCenters: 0, deviceCenters: 0, visitingEP: "No", lastUpdated: "Apr 7, 2026" },
-  "Mongolia": { pop: 3.3, ablatingEPs: 8, deviceEPs: 12, ablationRatio: "0.4M/EP", deviceRatio: "0.3M/EP", ablationCenters: 5, deviceCenters: 5, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Mozambique": { pop: 33.9, ablatingEPs: 0, deviceEPs: 3, ablationRatio: "N/A", deviceRatio: "11.3M/EP", ablationCenters: 0, deviceCenters: 2, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Nigeria": { pop: 232.7, ablatingEPs: 0, deviceEPs: 15, ablationRatio: "N/A", deviceRatio: "15.5M/EP", ablationCenters: 0, deviceCenters: 8, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Rwanda": { pop: 14.6, ablatingEPs: 0, deviceEPs: 4, ablationRatio: "N/A", deviceRatio: "3.6M/EP", ablationCenters: 1, deviceCenters: 4, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Senegal": { pop: 18.3, ablatingEPs: 6, deviceEPs: 12, ablationRatio: "3.1M/EP", deviceRatio: "1.5M/EP", ablationCenters: 3, deviceCenters: 12, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Sierra Leone": { pop: 8.8, ablatingEPs: 0, deviceEPs: 2, ablationRatio: "N/A", deviceRatio: "4.4M/EP", ablationCenters: 0, deviceCenters: 1, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Somalia": { pop: 18.1, ablatingEPs: 0, deviceEPs: 0, ablationRatio: "N/A", deviceRatio: "N/A", ablationCenters: 0, deviceCenters: 0, visitingEP: "No", lastUpdated: "Apr 7, 2026" },
-  "South Sudan": { pop: 11, ablatingEPs: 0, deviceEPs: 0, ablationRatio: "N/A", deviceRatio: "N/A", ablationCenters: 0, deviceCenters: 0, visitingEP: "No", lastUpdated: "Apr 7, 2026" },
-  "Sudan": { pop: 48.1, ablatingEPs: 0, deviceEPs: 27, ablationRatio: "N/A", deviceRatio: "1.8M/EP", ablationCenters: 0, deviceCenters: 8, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Tanzania": { pop: 67.4, ablatingEPs: 1, deviceEPs: 5, ablationRatio: "67.4M/EP", deviceRatio: "13.5M/EP", ablationCenters: 1, deviceCenters: 5, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Togo": { pop: 9, ablatingEPs: 1, deviceEPs: 3, ablationRatio: "9.0M/EP", deviceRatio: "3.0M/EP", ablationCenters: 2, deviceCenters: 3, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Tunisia": { pop: 12.1, ablatingEPs: 18, deviceEPs: 28, ablationRatio: "0.7M/EP", deviceRatio: "0.4M/EP", ablationCenters: 17, deviceCenters: 25, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Uganda": { pop: 50, ablatingEPs: 0, deviceEPs: 5, ablationRatio: "N/A", deviceRatio: "10.0M/EP", ablationCenters: 0, deviceCenters: 2, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Vietnam": { pop: 98, ablatingEPs: 15, deviceEPs: 30, ablationRatio: "6.5M/EP", deviceRatio: "3.3M/EP", ablationCenters: 11, deviceCenters: 6, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Zambia": { pop: 20.6, ablatingEPs: 0, deviceEPs: 1, ablationRatio: "N/A", deviceRatio: "20.6M/EP", ablationCenters: 0, deviceCenters: 6, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Zimbabwe": { pop: 16.7, ablatingEPs: 0, deviceEPs: 4, ablationRatio: "N/A", deviceRatio: "4.2M/EP", ablationCenters: 0, deviceCenters: 5, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "South Africa": { pop: 65.5, ablatingEPs: 15, deviceEPs: 19, ablationRatio: "4.4M/EP", deviceRatio: "3.4M/EP", ablationCenters: 7, deviceCenters: 24, visitingEP: "Yes", lastUpdated: "april 8, 2026" },
-  "Myanmar": { pop: 51.1, ablatingEPs: 14, deviceEPs: 23, ablationRatio: "3.6M/EP", deviceRatio: "2.2M/EP", ablationCenters: 7, deviceCenters: 7, visitingEP: "Yes", lastUpdated: "april 12,2026" }
-};
+// ── COUNTRY EP DATA — loaded from data-countries.json at startup ───────
+let countryEPData = {};
 
 function getCountryTip(name) {
   const d = countryEPData[name];
@@ -631,17 +594,20 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElement
    Single source of truth: a country is "complete" if it has an entry
    in countryEPData. Admin form edits countryEPData; everything else
    (ticker, globe, hero stats, map percentages, tracker pills) auto-updates. */
-africaComplete = new Set(AFRICA_COUNTRIES.filter(n => countryEPData[n]));
-africaPending  = new Set(AFRICA_COUNTRIES.filter(n => !countryEPData[n]));
-seaComplete    = new Set(SEA_COUNTRIES.filter(n => countryEPData[n]));
-seaPending     = new Set(SEA_COUNTRIES.filter(n => !countryEPData[n]));
-const africaAll = AFRICA_COUNTRIES.map(n => [n, countryEPData[n] ? 'c' : 'p']);
-const seaAll    = SEA_COUNTRIES.map(n => [n, countryEPData[n] ? 'c' : 'p']);
+// will be re-derived inside init() after countryEPData loads from JSON
+let africaAll = AFRICA_COUNTRIES.map(n => [n, 'p']);
+let seaAll    = SEA_COUNTRIES.map(n => [n, 'p']);
+function deriveStatusFromData() {
+  africaComplete = new Set(AFRICA_COUNTRIES.filter(n => countryEPData[n]));
+  africaPending  = new Set(AFRICA_COUNTRIES.filter(n => !countryEPData[n]));
+  seaComplete    = new Set(SEA_COUNTRIES.filter(n => countryEPData[n]));
+  seaPending     = new Set(SEA_COUNTRIES.filter(n => !countryEPData[n]));
+  africaAll      = AFRICA_COUNTRIES.map(n => [n, countryEPData[n] ? 'c' : 'p']);
+  seaAll         = SEA_COUNTRIES.map(n => [n, countryEPData[n] ? 'c' : 'p']);
+}
 function buildList(data,id){const el=document.getElementById(id);data.forEach(([name,s])=>{const d=document.createElement('div');d.className='cpill';d.innerHTML=`<div class="sdot ${s}"></div><span>${name}</span>`;el.appendChild(d);});}
-buildList(africaAll,'al');buildList(seaAll,'sl');
-
 /* ── ALL-COUNTRIES SEARCH FILTER ── */
-(function() {
+function attachSearchFilter() {
   const input = document.getElementById('ac-search');
   if (!input) return;
   input.addEventListener('input', e => {
@@ -651,7 +617,7 @@ buildList(africaAll,'al');buildList(seaAll,'sl');
       pill.classList.toggle('cpill-hidden', q && !name.includes(q));
     });
   });
-})();
+}
 
 /* ── AUTO-UPDATE STATS / COUNTS FROM DATA ── */
 function updateStats() {
@@ -702,27 +668,48 @@ function updateStats() {
   setStyle('prog-sea-bar', 'width', seaRate.toFixed(1) + '%');
   set('prog-sea-sub', seaRate.toFixed(1) + '% — ' + seaP + ' countries still pending');
 }
-updateStats();
-buildTicker();
-initGlobe();
+// init runs from the async block above
 
 function showTab(id,btn){document.querySelectorAll('.cgrid').forEach(e=>e.classList.add('hidden'));document.querySelectorAll('.tab').forEach(e=>e.classList.remove('on'));document.getElementById(id).classList.remove('hidden');btn.classList.add('on');}
 
-/* ── LOAD WORLD DATA & BUILD PREVIEWS ── */
-if (typeof d3 !== 'undefined') {
-  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json').then(world => {
-    worldData = world;
-    // Use shorter preview height on phones so cards stay compact
-    const isMobile = window.matchMedia('(max-width:768px)').matches;
-    const previewH = isMobile ? 280 : 460;
-    try { buildAfricaSVG('#africa-map-preview', 520, previewH); } catch(e){ console.warn('Africa preview failed', e); }
-    try { buildSEASVG('#sea-map-preview', 520, previewH); } catch(e){ console.warn('SEA preview failed', e); }
-    try { buildAfricaResultsSVG('#africa-results-preview', 520, previewH); } catch(e){ console.warn('Africa results preview failed', e); }
-    try { buildSEAResultsSVG('#sea-results-preview', 520, previewH); } catch(e){ console.warn('SEA results preview failed', e); }
-  }).catch(err => console.warn('World data load failed:', err));
-} else {
-  console.warn('d3 not loaded; map previews skipped');
-}
+/* ── BOOT: load country data, derive sets, then build everything ── */
+(async function init() {
+  try {
+    const r = await fetch('./data-countries.json?v=' + Date.now());
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    countryEPData = await r.json();
+  } catch (e) {
+    console.warn('Failed to load data-countries.json; site will show empty data:', e);
+  }
+  // Re-derive completion sets and lists now that countryEPData is loaded
+  deriveStatusFromData();
+
+  // Build static lists (Tracker pills, search), stats, ticker, globe
+  buildList(africaAll, 'al');
+  buildList(seaAll, 'sl');
+  attachSearchFilter();
+  updateStats();
+  buildTicker();
+  initGlobe();
+
+  // Load world map data and render previews
+  if (typeof d3 !== 'undefined') {
+    try {
+      const world = await d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json');
+      worldData = world;
+      const isMobile = window.matchMedia('(max-width:768px)').matches;
+      const previewH = isMobile ? 280 : 460;
+      try { buildAfricaSVG('#africa-map-preview', 520, previewH); } catch(e){ console.warn('Africa preview failed', e); }
+      try { buildSEASVG('#sea-map-preview', 520, previewH); } catch(e){ console.warn('SEA preview failed', e); }
+      try { buildAfricaResultsSVG('#africa-results-preview', 520, previewH); } catch(e){ console.warn('Africa results preview failed', e); }
+      try { buildSEAResultsSVG('#sea-results-preview', 520, previewH); } catch(e){ console.warn('SEA results preview failed', e); }
+    } catch (err) {
+      console.warn('World data load failed:', err);
+    }
+  } else {
+    console.warn('d3 not loaded; map previews skipped');
+  }
+})();
 
 function openLightbox(img) {
   const lb = document.getElementById('lightbox');
