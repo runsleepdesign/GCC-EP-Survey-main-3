@@ -67,7 +67,12 @@ function initGlobe() { try {
   camera.position.z = 2.75;
   function resize() {
     const w = canvas.parentElement.clientWidth, h = canvas.parentElement.clientHeight;
-    renderer.setSize(w, h); camera.aspect = w/h; camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+    const aspect = w/h;
+    camera.aspect = aspect;
+    // Pull camera back when the column is narrow so the globe never clips on the sides
+    camera.position.z = aspect < 1 ? 2.75 / aspect : 2.75;
+    camera.updateProjectionMatrix();
   }
   resize(); window.addEventListener('resize', resize);
   scene.add(new THREE.AmbientLight(0xffffff, 0.7));

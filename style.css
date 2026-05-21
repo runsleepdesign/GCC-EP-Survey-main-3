@@ -11,7 +11,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--offwhite);color:var(--tex
 
 /* ── TICKER ── */
 .ticker-wrap{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--lime);height:34px;overflow:hidden;display:flex;align-items:center;}
-.ticker-track{display:flex;align-items:center;animation:ticker 55s linear infinite;white-space:nowrap;}
+.ticker-track{display:flex;align-items:center;animation:ticker 140s linear infinite;white-space:nowrap;}
 .ticker-track:hover{animation-play-state:paused;}
 .ticker-item{display:inline-flex;align-items:center;gap:10px;padding:0 28px;font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--navy);}
 .ticker-dot{width:5px;height:5px;border-radius:50%;background:var(--navy);opacity:0.35;}
@@ -42,9 +42,9 @@ nav{position:fixed;top:34px;left:0;right:0;z-index:150;background:rgba(13,59,62,
 /* ══════════════════════════════
    HOME
 ══════════════════════════════ */
-.home{background:var(--navy);padding-bottom:0;min-height:100vh;max-height:100vh;overflow:hidden;}
+.home{background:var(--navy);padding-bottom:0;min-height:100vh;overflow:visible;}
 .hero{
-  display:grid;grid-template-columns:1.25fr 0.75fr;
+  display:grid;grid-template-columns:1.15fr 0.85fr;
   align-items:center;min-height:calc(100vh - 262px);
   position:relative;overflow:hidden;
 }
