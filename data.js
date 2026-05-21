@@ -5,7 +5,7 @@ function showSection(id) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('sec-' + id).classList.add('active');
   const btns = document.querySelectorAll('.nav-btn');
-  const idx = ['home','about','maps','results','progress'].indexOf(id);
+  const idx = ['home','about','maps','results'].indexOf(id);
   if (idx >= 0) btns[idx].classList.add('active');
   window.scrollTo(0,0);
 }
@@ -624,6 +624,19 @@ const africaAll = AFRICA_COUNTRIES.map(n => [n, countryEPData[n] ? 'c' : 'p']);
 const seaAll    = SEA_COUNTRIES.map(n => [n, countryEPData[n] ? 'c' : 'p']);
 function buildList(data,id){const el=document.getElementById(id);data.forEach(([name,s])=>{const d=document.createElement('div');d.className='cpill';d.innerHTML=`<div class="sdot ${s}"></div><span>${name}</span>`;el.appendChild(d);});}
 buildList(africaAll,'al');buildList(seaAll,'sl');
+
+/* ── ALL-COUNTRIES SEARCH FILTER ── */
+(function() {
+  const input = document.getElementById('ac-search');
+  if (!input) return;
+  input.addEventListener('input', e => {
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll('.all-countries .cpill').forEach(pill => {
+      const name = pill.textContent.trim().toLowerCase();
+      pill.classList.toggle('cpill-hidden', q && !name.includes(q));
+    });
+  });
+})();
 
 /* ── AUTO-UPDATE STATS / COUNTS FROM DATA ── */
 function updateStats() {

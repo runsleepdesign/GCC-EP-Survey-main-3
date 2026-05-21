@@ -29,7 +29,6 @@
     <button class="nav-btn" onclick="showSection('about')">About</button>
     <button class="nav-btn" onclick="showSection('maps')">Completion Rate</button>
     <button class="nav-btn" onclick="showSection('results')">Survey Results</button>
-    <button class="nav-btn" onclick="showSection('progress')">Tracker</button>
   </div>
 </nav>
 
@@ -164,10 +163,26 @@
         </div>
       </div>
     </div>
+
+    <!-- All Countries — list view consolidated from former Tracker page -->
+    <div class="all-countries">
+      <div class="ac-header">
+        <div>
+          <div class="sec-eyebrow" style="color:var(--lime);">All Countries</div>
+          <h3 class="ac-title">Response status by country</h3>
+        </div>
+        <input type="search" id="ac-search" class="ac-search" placeholder="Search country..." aria-label="Search countries">
+      </div>
+      <div class="tabs">
+        <button class="tab on" onclick="showTab('al',this)" id="tab-af">Africa (54)</button>
+        <button class="tab" onclick="showTab('sl',this)" id="tab-sea">Southeast Asia (6)</button>
+      </div>
+      <div id="al" class="cgrid"></div>
+      <div id="sl" class="cgrid hidden"></div>
+    </div>
   </div>
 </div>
 
-<!-- ══ PROGRESS ══ -->
 <div id="sec-results" class="page-section maps-sec">
   <div class="maps-inner">
     <div class="sec-eyebrow" style="color:var(--lime);margin-top:24px;">Data & Analysis</div>
@@ -239,40 +254,6 @@
   <div class="modal-body" id="results-modal-body"></div>
 </div>
 
-<div id="sec-progress" class="page-section prog-sec">
-  <div class="prog-inner">
-    <div class="sec-eyebrow">Operational Tracker</div>
-    <h2 class="sec-title">Country-by-Country Response Status</h2>
-
-    <div class="prog-overview">
-      <div class="prog-card">
-        <div class="prog-card-label">Overall progress</div>
-        <div class="prog-card-num" id="prog-total-num">33 <span>/ 61</span></div>
-        <div class="prog-bar-outer"><div class="prog-bar-fill total" id="prog-total-bar" style="width:53.3%"></div></div>
-        <div class="prog-card-sub" id="prog-total-sub">54.1% overall response rate</div>
-      </div>
-      <div class="prog-card">
-        <div class="prog-card-label">Africa</div>
-        <div class="prog-card-num" id="prog-af-num">31 <span>/ 55</span></div>
-        <div class="prog-bar-outer"><div class="prog-bar-fill africa" id="prog-af-bar" style="width:56.4%"></div></div>
-        <div class="prog-card-sub" id="prog-af-sub">56.4% — 24 countries still pending</div>
-      </div>
-      <div class="prog-card">
-        <div class="prog-card-label">Southeast Asia</div>
-        <div class="prog-card-num" id="prog-sea-num">3 <span>/ 6</span></div>
-        <div class="prog-bar-outer"><div class="prog-bar-fill sea" id="prog-sea-bar" style="width:50%"></div></div>
-        <div class="prog-card-sub" id="prog-sea-sub">50% — 2 countries still pending</div>
-      </div>
-    </div>
-
-    <div class="tabs">
-      <button class="tab on" onclick="showTab('al',this)" id="tab-af">Africa (55)</button>
-      <button class="tab" onclick="showTab('sl',this)" id="tab-sea">Southeast Asia (5)</button>
-    </div>
-    <div id="al" class="cgrid"></div>
-    <div id="sl" class="cgrid hidden"></div>
-  </div>
-</div>
 
 <!-- ══ MAP MODAL ══ -->
 <div class="modal-overlay" id="map-modal">
