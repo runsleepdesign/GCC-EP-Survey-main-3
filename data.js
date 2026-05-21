@@ -665,6 +665,12 @@ function updateStats() {
   setHTML('prog-sea-num', seaC + ' <span>/ ' + seaTotal + '</span>');
   set('tab-af', 'Africa (' + afTotal + ')');
   set('tab-sea', 'Southeast Asia (' + seaTotal + ')');
+  // About page stats
+  set('about-af-total', afTotal);
+  set('about-sea-total', seaTotal);
+  set('about-total', totalCountries);
+  set('about-af-inline', afTotal);
+  set('about-sea-inline', seaTotal);
   setStyle('prog-sea-bar', 'width', seaRate.toFixed(1) + '%');
   set('prog-sea-sub', seaRate.toFixed(1) + '% — ' + seaP + ' countries still pending');
 }
