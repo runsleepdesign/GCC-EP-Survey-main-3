@@ -24,12 +24,15 @@
       <span class="nav-wordmark-bot">Global EP Capacity Survey</span>
     </div>
   </div>
-  <div class="nav-links">
+  <div class="nav-links" id="nav-links">
     <button class="nav-btn active" onclick="showSection('home')">Home</button>
     <button class="nav-btn" onclick="showSection('about')">About</button>
     <button class="nav-btn" onclick="showSection('maps')">Completion Rate</button>
     <button class="nav-btn" onclick="showSection('results')">Survey Results</button>
   </div>
+  <button class="nav-toggle" aria-label="Menu" aria-expanded="false" onclick="toggleNav(this)">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <!-- ══ HOME ══ -->
