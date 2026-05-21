@@ -144,7 +144,7 @@ nav{position:fixed;top:34px;left:0;right:0;z-index:150;background:rgba(13,59,62,
 /* ══════════════════════════════
    SURVEY MAP
 ══════════════════════════════ */
-.maps-sec{background:var(--navy);padding:100px 80px 100px;}
+.maps-sec{background:var(--navy);padding:130px 80px 100px;}
 .maps-inner{max-width:1200px;margin:0 auto;}
 .maps-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px;}
 .mcard{
@@ -204,7 +204,7 @@ nav{position:fixed;top:34px;left:0;right:0;z-index:150;background:rgba(13,59,62,
 /* ══════════════════════════════
    PROGRESS
 ══════════════════════════════ */
-.prog-sec{background:var(--offwhite);padding:100px 80px 100px;}
+.prog-sec{background:var(--offwhite);padding:130px 80px 100px;}
 .prog-inner{max-width:1140px;margin:0 auto;}
 
 /* Overall progress cards */
