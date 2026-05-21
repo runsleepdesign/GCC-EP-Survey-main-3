@@ -712,10 +712,13 @@ function showTab(id,btn){document.querySelectorAll('.cgrid').forEach(e=>e.classL
 if (typeof d3 !== 'undefined') {
   d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json').then(world => {
     worldData = world;
-    try { buildAfricaSVG('#africa-map-preview', 520, 460); } catch(e){ console.warn('Africa preview failed', e); }
-    try { buildSEASVG('#sea-map-preview', 520, 460); } catch(e){ console.warn('SEA preview failed', e); }
-    try { buildAfricaResultsSVG('#africa-results-preview', 520, 460); } catch(e){ console.warn('Africa results preview failed', e); }
-    try { buildSEAResultsSVG('#sea-results-preview', 520, 460); } catch(e){ console.warn('SEA results preview failed', e); }
+    // Use shorter preview height on phones so cards stay compact
+    const isMobile = window.matchMedia('(max-width:768px)').matches;
+    const previewH = isMobile ? 280 : 460;
+    try { buildAfricaSVG('#africa-map-preview', 520, previewH); } catch(e){ console.warn('Africa preview failed', e); }
+    try { buildSEASVG('#sea-map-preview', 520, previewH); } catch(e){ console.warn('SEA preview failed', e); }
+    try { buildAfricaResultsSVG('#africa-results-preview', 520, previewH); } catch(e){ console.warn('Africa results preview failed', e); }
+    try { buildSEAResultsSVG('#sea-results-preview', 520, previewH); } catch(e){ console.warn('SEA results preview failed', e); }
   }).catch(err => console.warn('World data load failed:', err));
 } else {
   console.warn('d3 not loaded; map previews skipped');
