@@ -7,7 +7,22 @@ function showSection(id) {
   const btns = document.querySelectorAll('.nav-btn');
   const idx = ['home','about','maps','results'].indexOf(id);
   if (idx >= 0) btns[idx].classList.add('active');
+  // Auto-close mobile menu after selection
+  const links = document.getElementById('nav-links');
+  if (links && links.classList.contains('open')) {
+    links.classList.remove('open');
+    const t = document.querySelector('.nav-toggle');
+    if (t) { t.classList.remove('open'); t.setAttribute('aria-expanded','false'); }
+  }
   window.scrollTo(0,0);
+}
+
+/* ── MOBILE NAV TOGGLE ── */
+function toggleNav(btn) {
+  const links = document.getElementById('nav-links');
+  const open = links.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
 
 /* ── TICKER (built from data after country sets load) ── */

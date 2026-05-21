@@ -261,16 +261,136 @@ nav{position:fixed;top:34px;left:0;right:0;z-index:150;background:rgba(13,59,62,
 .heat-na{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,0.45);font-weight:500;}
 .heat-na-dot{width:10px;height:10px;border-radius:50%;background:#3a4d52;border:1px solid rgba(255,255,255,0.18);}
 
-@media(max-width:900px){
-  .hero{grid-template-columns:1fr;}
-  .hero-right{height:60vw;min-height:300px;}
-  .maps-grid,.about-grid,.about-foot,.prog-overview{grid-template-columns:1fr;}
+/* ── MOBILE HAMBURGER TOGGLE (hidden on desktop) ── */
+.nav-toggle{display:none;background:transparent;border:none;cursor:pointer;width:44px;height:44px;padding:10px;flex-direction:column;justify-content:space-around;align-items:stretch;}
+.nav-toggle span{display:block;height:2px;background:var(--white);border-radius:2px;transition:transform 0.25s,opacity 0.2s;}
+.nav-toggle.open span:nth-child(1){transform:translateY(8px) rotate(45deg);}
+.nav-toggle.open span:nth-child(2){opacity:0;}
+.nav-toggle.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
+
+/* ── TABLET (≤ 1024px) ── */
+@media(max-width:1024px){
+  .about-sec,.maps-sec{padding:130px 40px 80px;}
+  .about-grid{gap:40px;}
+  nav{padding:0 28px;}
+  .nav-btn{padding:8px 14px;font-size:12.5px;}
+  .hero-left{padding:24px 32px 24px 60px;}
+}
+
+/* ── MOBILE (≤ 768px) ── */
+@media(max-width:768px){
+  /* Nav: hamburger menu */
+  nav{padding:0 18px;height:64px;}
+  .nav-logo{height:42px;}
+  .nav-div{display:none;}
+  .nav-wordmark-top{font-size:10px;}
+  .nav-wordmark-bot{font-size:11px;white-space:nowrap;}
+  .nav-toggle{display:flex;}
+  .nav-links{
+    position:absolute;top:100%;right:0;left:0;
+    flex-direction:column;align-items:stretch;gap:0;
+    background:rgba(13,59,62,0.99);backdrop-filter:blur(14px);
+    border-top:1px solid rgba(168,224,74,0.18);
+    padding:12px 18px 18px;
+    transform:translateY(-12px);opacity:0;pointer-events:none;
+    transition:opacity 0.2s,transform 0.2s;
+  }
+  .nav-links.open{transform:translateY(0);opacity:1;pointer-events:auto;}
+  .nav-btn{padding:14px 16px;font-size:15px;border-radius:12px;border-color:transparent;text-align:left;}
+  .nav-btn.active{background:var(--lime);color:var(--navy);}
+
+  /* Ticker - smaller text */
+  .ticker-item{font-size:10px;padding:0 16px;letter-spacing:0.04em;}
+
+  /* Sections: tighter padding, recall nav is 34+64=98px */
+  .page-section{padding-top:106px;}
+  .about-sec,.maps-sec{padding:106px 18px 60px;}
+  .maps-inner,.about-inner,.about-hero{padding:0;}
+  .sec-title{font-size:clamp(26px,7vw,36px)!important;line-height:1.1;}
+
+  /* Home: hide globe entirely, stack content */
+  .home{min-height:auto;max-height:none;overflow:visible;padding-top:0;}
+  .hero{grid-template-columns:1fr;min-height:auto;padding-top:106px;padding-bottom:24px;}
+  .hero-left{padding:0 18px;}
+  .hero h1{font-size:clamp(36px,9vw,52px);margin-bottom:10px;}
+  .hero-partnership{font-size:14px;margin-bottom:14px;}
+  .hero-sub{font-size:14px;line-height:1.55;margin-bottom:18px;}
+  .hero-cta{gap:10px;margin-bottom:22px;}
+  .hero-cta a{padding:10px 18px;font-size:12.5px;flex:1;justify-content:center;}
+  .hero-logos{gap:20px;margin-bottom:22px;}
+  .hero-logo-block img{height:62px;}
+  .hero-x{font-size:20px;margin-bottom:10px;}
+  .hero-right{display:none;}
+  .hero-stats{flex-wrap:wrap;}
+  .hstat{flex:1 1 50%;padding:14px 12px;border-bottom:1px solid rgba(255,255,255,0.07);}
+  .hstat:nth-child(2){border-right:none;}
+  .hstat:nth-child(3),.hstat:nth-child(4){border-bottom:none;}
+  .hstat-n{font-size:26px;}
+  .hstat-l{font-size:9px;}
+
+  /* Photo strip — smaller cards */
+  .photo-frame{width:148px;height:96px;}
+  .photo-cap{font-size:10px;padding:18px 10px 8px;}
+
+  /* About */
+  .about-hero{margin:12px 0 36px;}
   .about-stats{grid-template-columns:repeat(2,1fr);}
+  .astat{padding:18px 10px;}
   .astat:nth-child(2){border-right:none;}
   .astat:nth-child(1),.astat:nth-child(2){border-bottom:1px solid rgba(46,107,122,0.1);}
-  nav{padding:0 20px;}.nav-links{gap:4px;}
-  .nav-btn{padding:7px 12px;font-size:12px;}
-  .about-sec,.maps-sec,.prog-sec{padding:48px 20px 80px;}
-  .hero-left{padding:40px 20px;}
-  .afoot-card{padding:28px 24px;}
+  .astat-n{font-size:30px;}
+  .about-grid{grid-template-columns:1fr;gap:32px;margin-top:8px;}
+  .acard{padding:24px 22px;}
+  .acard-logo{height:56px;margin-bottom:14px;}
+  .acard h3{font-size:16px;}
+  .acard p{font-size:14px;}
+
+  /* About foot */
+  .about-foot{grid-template-columns:1fr;gap:18px;margin-top:48px;padding-top:42px;}
+  .afoot-card{padding:26px 22px;}
+  .afoot-card h3{font-size:22px;}
+
+  /* Maps page */
+  .maps-grid{grid-template-columns:1fr;gap:18px;margin-top:24px;}
+  .mcard{padding:22px 20px;border-radius:16px;}
+  .mcard-title{font-size:19px;}
+  .mcard-pct{font-size:24px;}
+
+  /* All Countries panel */
+  .all-countries{margin-top:40px;padding-top:32px;}
+  .ac-header{flex-direction:column;align-items:stretch;gap:14px;}
+  .ac-title{font-size:21px;}
+  .ac-search{width:100%;}
+  .all-countries .tabs{flex-wrap:wrap;}
+  .all-countries .tab{flex:1;padding:9px 14px;font-size:12px;}
+  /* Cap pill list with scroll so it doesn't dominate the page */
+  .cgrid{grid-template-columns:1fr;max-height:50vh;overflow-y:auto;
+    padding:4px;border-radius:12px;background:rgba(0,0,0,0.18);
+    scrollbar-width:thin;scrollbar-color:rgba(168,224,74,0.4) transparent;}
+  .cgrid::-webkit-scrollbar{width:6px;}
+  .cgrid::-webkit-scrollbar-thumb{background:rgba(168,224,74,0.4);border-radius:3px;}
+
+  /* Heat legend stacks tighter */
+  .heat-legend{flex-wrap:wrap;gap:10px;padding:12px;}
+  .heat-legend-bar{width:140px;}
+
+  /* Modals */
+  .modal-header{padding:12px 18px;}
+  .modal-title{font-size:18px;}
+  .modal-meta{font-size:11px;}
+  .modal-legend{padding:8px 18px;flex-wrap:wrap;gap:10px;}
+  .modal-close{width:36px;height:36px;font-size:18px;}
+
+  /* Lightbox */
+  #lightbox button{top:auto!important;bottom:80px!important;right:50%!important;transform:translateX(50%)!important;}
+}
+
+/* ── SMALL MOBILE (≤ 380px) ── */
+@media(max-width:380px){
+  .hero h1{font-size:34px;}
+  .hero-cta{flex-direction:column;}
+  .hero-cta a{width:100%;}
+  .nav-wordmark{display:none;}
+  .hstat-n{font-size:24px;}
+  .ac-search{font-size:13px;}
 }
