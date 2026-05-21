@@ -85,7 +85,7 @@ function initGlobe() { try {
   // Build complete/pending ID sets from name → ID lookup, so globe stays in sync with data
   function nameToId() {
     const out = {};
-    const africa = {24:'Angola',204:'Benin',72:'Botswana',854:'Burkina Faso',108:'Burundi',132:'Cabo Verde',120:'Cameroon',140:'Central African Republic',148:'Chad',174:'Comoros',178:'Congo-Brazzaville',180:'DR Congo',384:"Côte d'Ivoire",262:'Djibouti',818:'Egypt',226:'Equatorial Guinea',232:'Eritrea',748:'Eswatini',231:'Ethiopia',266:'Gabon',270:'Gambia',288:'Ghana',324:'Guinea',624:'Guinea-Bissau',404:'Kenya',426:'Lesotho',430:'Liberia',434:'Libya',450:'Madagascar',454:'Malawi',466:'Mali',478:'Mauritania',480:'Mauritius',504:'Morocco',508:'Mozambique',516:'Namibia',562:'Niger',566:'Nigeria',646:'Rwanda',678:"São Tomé and Príncipe",686:'Senegal',694:'Sierra Leone',706:'Somalia',710:'South Africa',729:'Sudan',728:'South Sudan',716:'Zimbabwe',768:'Togo',788:'Tunisia',800:'Uganda',834:'Tanzania',894:'Zambia',12:'Algeria',690:'Seychelles'};
+    const africa = {24:'Angola',204:'Benin',72:'Botswana',854:'Burkina Faso',108:'Burundi',132:'Cabo Verde',120:'Cameroon',140:'Central African Republic',148:'Chad',174:'Comoros',178:'Congo (Brazzaville)',180:'DR Congo (Kinshasa)',384:"Côte d'Ivoire",262:'Djibouti',818:'Egypt',226:'Equatorial Guinea',232:'Eritrea',748:'Eswatini',231:'Ethiopia',266:'Gabon',270:'Gambia',288:'Ghana',324:'Guinea',624:'Guinea-Bissau',404:'Kenya',426:'Lesotho',430:'Liberia',434:'Libya',450:'Madagascar',454:'Malawi',466:'Mali',478:'Mauritania',480:'Mauritius',504:'Morocco',508:'Mozambique',516:'Namibia',562:'Niger',566:'Nigeria',646:'Rwanda',678:"São Tomé and Príncipe",686:'Senegal',694:'Sierra Leone',706:'Somalia',710:'South Africa',729:'Sudan',728:'South Sudan',716:'Zimbabwe',768:'Togo',788:'Tunisia',800:'Uganda',834:'Tanzania',894:'Zambia',12:'Algeria',690:'Seychelles'};
     const sea = {116:'Cambodia',418:'Laos',104:'Myanmar',764:'Thailand',704:'Vietnam',496:'Mongolia'};
     Object.entries(africa).forEach(([id,n]) => out[+id] = n);
     Object.entries(sea).forEach(([id,n]) => out[+id] = n);
@@ -174,11 +174,17 @@ function initGlobe() { try {
   })();
 } catch(e) { console.warn('Globe init skipped:', e.message); } }
 
-/* ── MAP DATA ── */
-const africaComplete=new Set(['Angola','Benin','Botswana','Burundi','Cameroon','Chad','Congo-Brazzaville','Egypt','Equatorial Guinea','Ethiopia','Gabon','Gambia','Ghana','Kenya','Liberia','Libya','Mali','Mozambique','Namibia','Nigeria','Rwanda','Senegal','Sierra Leone','Somalia','South Sudan','Sudan','Tanzania','Togo','Tunisia','Uganda','Zambia']);
-const africaPending=new Set(['Algeria','Burkina Faso','Cabo Verde','Central African Republic','Comoros',"Côte d'Ivoire",'Djibouti','Eritrea','Eswatini','Guinea','Guinea-Bissau','Lesotho','Madagascar','Malawi','Mauritania','Mauritius','Morocco','Niger',"São Tomé and Príncipe",'Seychelles','South Africa','DR Congo','Zimbabwe']);
-const seaComplete=new Set(['Cambodia','Mongolia','Vietnam']);
-const seaPending=new Set(['Laos','Myanmar','Thailand']);
+/* ── MAP DATA ──
+   Canonical country lists (master scope). Completion status is derived
+   from countryEPData below: a country is "complete" iff it has an entry
+   in countryEPData, "pending" otherwise. This means the admin form
+   (which edits countryEPData) drives the ticker, globe, stats, maps,
+   and tracker automatically — no manual list edits needed. */
+const AFRICA_COUNTRIES = ['Algeria','Angola','Benin','Botswana','Burkina Faso','Burundi','Cabo Verde','Cameroon','Central African Republic','Chad','Comoros','Congo (Brazzaville)','DR Congo (Kinshasa)',"Côte d'Ivoire",'Djibouti','Egypt','Equatorial Guinea','Eritrea','Eswatini','Ethiopia','Gabon','Gambia','Ghana','Guinea','Guinea-Bissau','Kenya','Lesotho','Liberia','Libya','Madagascar','Malawi','Mali','Mauritania','Mauritius','Morocco','Mozambique','Namibia','Niger','Nigeria','Rwanda',"São Tomé and Príncipe",'Senegal','Seychelles','Sierra Leone','Somalia','South Africa','South Sudan','Sudan','Tanzania','Togo','Tunisia','Uganda','Zambia','Zimbabwe'];
+const SEA_COUNTRIES = ['Cambodia','Laos','Mongolia','Myanmar','Thailand','Vietnam'];
+// Declared here, populated right after countryEPData is defined.
+let africaComplete = new Set(), africaPending = new Set(AFRICA_COUNTRIES);
+let seaComplete = new Set(), seaPending = new Set(SEA_COUNTRIES);
 const africaIslands=[
   {name:'Cabo Verde',lon:-23.0,lat:15.1,dx:14,dy:-12,anchor:'start'},
   {name:"São Tomé & Príncipe",lon:6.6,lat:0.2,dx:-14,dy:16,anchor:'end'},
@@ -186,7 +192,7 @@ const africaIslands=[
   {name:'Mauritius',lon:57.6,lat:-20.2,dx:14,dy:-12,anchor:'start'},
   {name:'Seychelles',lon:55.5,lat:-4.6,dx:14,dy:-12,anchor:'start'},
 ];
-function getAN(id){const m={12:'Algeria',24:'Angola',204:'Benin',72:'Botswana',854:'Burkina Faso',108:'Burundi',132:'Cabo Verde',120:'Cameroon',140:'Central African Republic',148:'Chad',174:'Comoros',178:'Congo-Brazzaville',180:'DR Congo',384:"Côte d'Ivoire",262:'Djibouti',818:'Egypt',226:'Equatorial Guinea',232:'Eritrea',231:'Ethiopia',266:'Gabon',270:'Gambia',288:'Ghana',324:'Guinea',624:'Guinea-Bissau',404:'Kenya',426:'Lesotho',430:'Liberia',434:'Libya',450:'Madagascar',454:'Malawi',466:'Mali',478:'Mauritania',480:'Mauritius',504:'Morocco',508:'Mozambique',516:'Namibia',562:'Niger',566:'Nigeria',646:'Rwanda',678:"São Tomé and Príncipe",686:'Senegal',694:'Sierra Leone',706:'Somalia',710:'South Africa',729:'Sudan',728:'South Sudan',716:'Zimbabwe',748:'Eswatini',768:'Togo',788:'Tunisia',800:'Uganda',834:'Tanzania',894:'Zambia',732:'Western Sahara'};return m[id]||null;}
+function getAN(id){const m={12:'Algeria',24:'Angola',204:'Benin',72:'Botswana',854:'Burkina Faso',108:'Burundi',132:'Cabo Verde',120:'Cameroon',140:'Central African Republic',148:'Chad',174:'Comoros',178:'Congo (Brazzaville)',180:'DR Congo (Kinshasa)',384:"Côte d'Ivoire",262:'Djibouti',818:'Egypt',226:'Equatorial Guinea',232:'Eritrea',231:'Ethiopia',266:'Gabon',270:'Gambia',288:'Ghana',324:'Guinea',624:'Guinea-Bissau',404:'Kenya',426:'Lesotho',430:'Liberia',434:'Libya',450:'Madagascar',454:'Malawi',466:'Mali',478:'Mauritania',480:'Mauritius',504:'Morocco',508:'Mozambique',516:'Namibia',562:'Niger',566:'Nigeria',646:'Rwanda',678:"São Tomé and Príncipe",686:'Senegal',694:'Sierra Leone',706:'Somalia',710:'South Africa',729:'Sudan',728:'South Sudan',716:'Zimbabwe',748:'Eswatini',768:'Togo',788:'Tunisia',800:'Uganda',834:'Tanzania',894:'Zambia',732:'Western Sahara'};return m[id]||null;}
 function getSN(id){return {116:'Cambodia',418:'Laos',104:'Myanmar',764:'Thailand',704:'Vietnam',496:'Mongolia'}[id]||null;}
 
 const CC='#5a9e2f',CP='#c0392b',CO='#1e5560',CS='rgba(255,255,255,0.14)',CL='rgba(255,255,255,0.28)';
@@ -231,14 +237,14 @@ function buildAfricaSVG(container, W, H) {
   svg.selectAll('path').data(africa).join('path').attr('d',path).attr('stroke',CS).attr('stroke-width',0.5)
     .attr('fill',d=>{const n=getAN(+d.id);return africaComplete.has(n)?CC:africaPending.has(n)?CP:CO;})
     .style('cursor','pointer')
-    .on('mousemove',(e,d)=>{const n=getAN(+d.id);const dn=n==='DR Congo'?'DR Congo (Kinshasa)':n==='Congo-Brazzaville'?'Congo (Brazzaville)':n;tip(e,dn,africaComplete.has(n)?'Complete':'Pending');})
+    .on('mousemove',(e,d)=>{const n=getAN(+d.id);tip(e,n,africaComplete.has(n)?'Complete':'Pending');})
     .on('mouseleave',untip);
   const lg=svg.append('g'),ll=svg.append('g');
   africa.forEach(d=>{
     const n=getAN(+d.id);if(!n)return;
     const c=path.centroid(d);if(!c||isNaN(c[0]))return;
     const area=path.area(d);const ext=extA[n];
-    const disp=n.replace('Congo-Brazzaville','Congo-B').replace('DR Congo','DR Congo').replace('Central African Republic','Cent. African Rep.').replace('Western Sahara','W. Sahara').replace('Equatorial Guinea','Eq. Guinea');
+    const disp=n.replace('Congo (Brazzaville)','Congo-B').replace('DR Congo (Kinshasa)','DR Congo').replace('Central African Republic','Cent. African Rep.').replace('Western Sahara','W. Sahara').replace('Equatorial Guinea','Eq. Guinea');
     if(ext){const[lx,ly]=ext;lg.append('line').attr('x1',c[0]).attr('y1',c[1]).attr('x2',lx<W/2?lx+5:lx-5).attr('y2',ly).attr('stroke',CL).attr('stroke-width',0.7).attr('stroke-dasharray','2,2');ll.append('text').attr('x',lx<W/2?lx-2:lx+2).attr('y',ly+3).attr('text-anchor',lx<W/2?'end':'start').attr('font-size',W>600?'8px':'6px').attr('font-family','DM Sans,sans-serif').attr('fill','#c8d8dc').attr('font-weight','500').text(disp);}
     else{if(area<70*(W/520)**2)return;const fs=area>3000*(W/520)**2?W>600?9:7:area>800*(W/520)**2?W>600?8:6.5:W>600?7:5.5;const words=disp.split(' ');if(words.length>=3&&area>1200*(W/520)**2){const mid=Math.ceil(words.length/2);[[words.slice(0,mid).join(' '),-4],[words.slice(mid).join(' '),8]].forEach(([t,dy])=>{ll.append('text').attr('x',c[0]).attr('y',c[1]+dy).attr('text-anchor','middle').attr('font-size',fs+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#fff').attr('font-weight','500').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.65)').attr('stroke-width','2px').text(t);})}else{ll.append('text').attr('x',c[0]).attr('y',c[1]+2).attr('text-anchor','middle').attr('font-size',fs+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#fff').attr('font-weight','500').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.65)').attr('stroke-width','2px').text(disp);}}
   });
@@ -408,7 +414,7 @@ const countryEPData = {
   "Cambodia": { pop: 17.4, ablatingEPs: 6, deviceEPs: 11, ablationRatio: "2.9M/EP", deviceRatio: "1.6M/EP", ablationCenters: 3, deviceCenters: 4, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
   "Cameroon": { pop: 28.6, ablatingEPs: 3, deviceEPs: 10, ablationRatio: "9.5M/EP", deviceRatio: "2.9M/EP", ablationCenters: 1, deviceCenters: 5, visitingEP: "No", lastUpdated: "Apr 7, 2026" },
   "Chad": { pop: 18.5, ablatingEPs: 0, deviceEPs: 0, ablationRatio: "N/A", deviceRatio: "N/A", ablationCenters: 0, deviceCenters: 0, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
-  "Congo, Republic of the": { pop: 6.1, ablatingEPs: 0, deviceEPs: 2, ablationRatio: "N/A", deviceRatio: "3.0M/EP", ablationCenters: 0, deviceCenters: 3, visitingEP: "No", lastUpdated: "Apr 7, 2026" },
+  "Congo (Brazzaville)": { pop: 6.1, ablatingEPs: 0, deviceEPs: 2, ablationRatio: "N/A", deviceRatio: "3.0M/EP", ablationCenters: 0, deviceCenters: 3, visitingEP: "No", lastUpdated: "Apr 7, 2026" },
   "Egypt": { pop: 106.5, ablatingEPs: 100, deviceEPs: 120, ablationRatio: "1.1M/EP", deviceRatio: "0.9M/EP", ablationCenters: 90, deviceCenters: 100, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
   "Equatorial Guinea": { pop: 1.8, ablatingEPs: 0, deviceEPs: 2, ablationRatio: "N/A", deviceRatio: "0.9M/EP", ablationCenters: 0, deviceCenters: 1, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
   "Ethiopia": { pop: 128.7, ablatingEPs: 0, deviceEPs: 8, ablationRatio: "N/A", deviceRatio: "16.1M/EP", ablationCenters: 0, deviceCenters: 4, visitingEP: "Yes", lastUpdated: "Apr 7, 2026" },
@@ -517,7 +523,7 @@ function buildAfricaResultsSVG(container, W, H) {
     const n=getAN(+d.id);if(!n)return;
     const c=path.centroid(d);if(!c||isNaN(c[0]))return;
     const area=path.area(d);const ext=extA[n];
-    const disp=n.replace('Congo-Brazzaville','Congo-B').replace('DR Congo','DR Congo').replace('Central African Republic','Cent. African Rep.').replace('Western Sahara','W. Sahara').replace('Equatorial Guinea','Eq. Guinea');
+    const disp=n.replace('Congo (Brazzaville)','Congo-B').replace('DR Congo (Kinshasa)','DR Congo').replace('Central African Republic','Cent. African Rep.').replace('Western Sahara','W. Sahara').replace('Equatorial Guinea','Eq. Guinea');
     if(ext){const[lx,ly]=ext;lg.append('line').attr('x1',c[0]).attr('y1',c[1]).attr('x2',lx<W/2?lx+5:lx-5).attr('y2',ly).attr('stroke',CL).attr('stroke-width',0.7).attr('stroke-dasharray','2,2');ll.append('text').attr('x',lx<W/2?lx-2:lx+2).attr('y',ly+3).attr('text-anchor',lx<W/2?'end':'start').attr('font-size',Math.min(W*0.0077,9)+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#c8d8dc').attr('font-weight','500').text(disp);}
     else{if(area<70*(W/520)**2)return;const fs=Math.min(area>3000*(W/520)**2?W*0.0094:area>800*(W/520)**2?W*0.0077:W*0.0068,area>3000*(W/520)**2?13:area>800*(W/520)**2?11:9);const words=disp.split(' ');if(words.length>=3&&area>1200*(W/520)**2){const mid=Math.ceil(words.length/2);[[words.slice(0,mid).join(' '),-4],[words.slice(mid).join(' '),8]].forEach(([t,dy])=>{ll.append('text').attr('x',c[0]).attr('y',c[1]+dy).attr('text-anchor','middle').attr('font-size',fs+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#fff').attr('font-weight','500').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.65)').attr('stroke-width','2px').text(t);})}else{ll.append('text').attr('x',c[0]).attr('y',c[1]+2).attr('text-anchor','middle').attr('font-size',fs+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#fff').attr('font-weight','500').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.65)').attr('stroke-width','2px').text(disp);}}
   });
@@ -606,8 +612,16 @@ document.getElementById('results-modal').addEventListener('keydown',e=>{if(e.key
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('results-modal').classList.contains('open'))closeResultsModal();});
 
 /* ── COUNTRY LISTS ── */
-const africaAll=[['Algeria','p'],['Angola','c'],['Benin','c'],['Botswana','c'],['Burkina Faso','p'],['Burundi','c'],['Cabo Verde','p'],['Cameroon','c'],['Central African Republic','p'],['Chad','c'],['Comoros','p'],['Congo (Brazzaville)','c'],['DR Congo (Kinshasa)','p'],["Côte d'Ivoire",'p'],['Djibouti','p'],['Egypt','c'],['Equatorial Guinea','c'],['Eritrea','p'],['Eswatini','p'],['Ethiopia','c'],['Gabon','c'],['Gambia','c'],['Ghana','c'],['Guinea','p'],['Guinea-Bissau','p'],['Kenya','c'],['Lesotho','p'],['Liberia','c'],['Libya','c'],['Madagascar','p'],['Malawi','p'],['Mali','c'],['Mauritania','p'],['Mauritius','p'],['Morocco','p'],['Mozambique','c'],['Namibia','c'],['Niger','p'],['Nigeria','c'],['Rwanda','c'],["São Tomé and Príncipe",'p'],['Senegal','c'],['Seychelles','p'],['Sierra Leone','c'],['Somalia','c'],['South Africa','p'],['South Sudan','c'],['Sudan','c'],['Tanzania','c'],['Togo','c'],['Tunisia','c'],['Uganda','c'],['Zambia','c'],['Zimbabwe','p']];
-const seaAll=[['Cambodia','c'],['Mongolia','c'],['Laos','p'],['Myanmar','p'],['Thailand','p'],['Vietnam','c']];
+/* ── DERIVE completion sets and lists from countryEPData ──
+   Single source of truth: a country is "complete" if it has an entry
+   in countryEPData. Admin form edits countryEPData; everything else
+   (ticker, globe, hero stats, map percentages, tracker pills) auto-updates. */
+africaComplete = new Set(AFRICA_COUNTRIES.filter(n => countryEPData[n]));
+africaPending  = new Set(AFRICA_COUNTRIES.filter(n => !countryEPData[n]));
+seaComplete    = new Set(SEA_COUNTRIES.filter(n => countryEPData[n]));
+seaPending     = new Set(SEA_COUNTRIES.filter(n => !countryEPData[n]));
+const africaAll = AFRICA_COUNTRIES.map(n => [n, countryEPData[n] ? 'c' : 'p']);
+const seaAll    = SEA_COUNTRIES.map(n => [n, countryEPData[n] ? 'c' : 'p']);
 function buildList(data,id){const el=document.getElementById(id);data.forEach(([name,s])=>{const d=document.createElement('div');d.className='cpill';d.innerHTML=`<div class="sdot ${s}"></div><span>${name}</span>`;el.appendChild(d);});}
 buildList(africaAll,'al');buildList(seaAll,'sl');
 
@@ -649,6 +663,8 @@ function updateStats() {
   setStyle('prog-af-bar', 'width', afRate.toFixed(1) + '%');
   set('prog-af-sub', afRate.toFixed(1) + '% — ' + afP + ' countries still pending');
   setHTML('prog-sea-num', seaC + ' <span>/ ' + seaTotal + '</span>');
+  set('tab-af', 'Africa (' + afTotal + ')');
+  set('tab-sea', 'Southeast Asia (' + seaTotal + ')');
   setStyle('prog-sea-bar', 'width', seaRate.toFixed(1) + '%');
   set('prog-sea-sub', seaRate.toFixed(1) + '% — ' + seaP + ' countries still pending');
 }
