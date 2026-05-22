@@ -222,11 +222,11 @@ const SEA_COUNTRIES = ['Cambodia','Laos','Mongolia','Myanmar','Thailand','Vietna
 let africaComplete = new Set(), africaPending = new Set(AFRICA_COUNTRIES);
 let seaComplete = new Set(), seaPending = new Set(SEA_COUNTRIES);
 const africaIslands=[
-  {name:'Cabo Verde',lon:-23.0,lat:15.1,dx:14,dy:-12,anchor:'start'},
-  {name:"São Tomé & Príncipe",lon:6.6,lat:0.2,dx:-14,dy:16,anchor:'end'},
-  {name:'Comoros',lon:43.7,lat:-11.7,dx:14,dy:-12,anchor:'start'},
-  {name:'Mauritius',lon:57.6,lat:-20.2,dx:14,dy:-12,anchor:'start'},
-  {name:'Seychelles',lon:55.5,lat:-4.6,dx:14,dy:-12,anchor:'start'},
+  {name:'Cabo Verde',lon:-23.0,lat:15.1,dx:30,dy:-20,anchor:'start'},
+  {name:"São Tomé & Príncipe",lon:6.6,lat:0.2,dx:-26,dy:26,anchor:'end'},
+  {name:'Comoros',lon:43.7,lat:-11.7,dx:32,dy:-16,anchor:'start'},
+  {name:'Mauritius',lon:57.6,lat:-20.2,dx:32,dy:-14,anchor:'start'},
+  {name:'Seychelles',lon:55.5,lat:-4.6,dx:32,dy:-16,anchor:'start'},
 ];
 function getAN(id){const m={12:'Algeria',24:'Angola',204:'Benin',72:'Botswana',854:'Burkina Faso',108:'Burundi',132:'Cabo Verde',120:'Cameroon',140:'Central African Republic',148:'Chad',174:'Comoros',178:'Congo (Brazzaville)',180:'DR Congo (Kinshasa)',384:"Côte d'Ivoire",262:'Djibouti',818:'Egypt',226:'Equatorial Guinea',232:'Eritrea',231:'Ethiopia',266:'Gabon',270:'Gambia',288:'Ghana',324:'Guinea',624:'Guinea-Bissau',404:'Kenya',426:'Lesotho',430:'Liberia',434:'Libya',450:'Madagascar',454:'Malawi',466:'Mali',478:'Mauritania',480:'Mauritius',504:'Morocco',508:'Mozambique',516:'Namibia',562:'Niger',566:'Nigeria',646:'Rwanda',678:"São Tomé and Príncipe",686:'Senegal',694:'Sierra Leone',706:'Somalia',710:'South Africa',729:'Sudan',728:'South Sudan',716:'Zimbabwe',748:'Eswatini',768:'Togo',788:'Tunisia',800:'Uganda',834:'Tanzania',894:'Zambia',732:'Western Sahara'};return m[id]||null;}
 function getSN(id){return {116:'Cambodia',418:'Laos',104:'Myanmar',764:'Thailand',704:'Vietnam',496:'Mongolia'}[id]||null;}
@@ -249,11 +249,16 @@ function tip(e,n,s){
 }
 function untip(){tt.style.opacity='0';}
 
+// External-label offsets for small countries — [dx, dy] from the country's
+// own centroid, in 520-wide-map units, scaled to the actual render size.
+// Keeps callouts hugging the map instead of floating in open ocean.
 const extA={
-  'Gambia':[58,212],'Guinea-Bissau':[38,242],'Sierra Leone':[38,270],'Liberia':[44,292],
-  'Togo':[472,270],'Benin':[484,254],'Rwanda':[482,304],'Burundi':[490,318],
-  'Djibouti':[486,216],'Eritrea':[492,197],'Lesotho':[476,432],'Eswatini':[486,414],
-  'Equatorial Guinea':[60,314]
+  'Gambia':[-40,-7],'Guinea-Bissau':[-44,3],'Sierra Leone':[-40,11],'Liberia':[-32,24],
+  'Equatorial Guinea':[-42,15],
+  'Togo':[-7,33],'Benin':[13,29],
+  'Rwanda':[-38,-6],'Burundi':[-38,11],
+  'Djibouti':[38,-3],'Eritrea':[40,-14],
+  'Lesotho':[26,19],'Eswatini':[39,3]
 };
 
 let worldData=null;
@@ -281,15 +286,15 @@ function buildAfricaSVG(container, W, H) {
     const c=path.centroid(d);if(!c||isNaN(c[0]))return;
     const area=path.area(d);const ext=extA[n];
     const disp=n.replace('Congo (Brazzaville)','Congo-B').replace('DR Congo (Kinshasa)','DR Congo').replace('Central African Republic','Cent. African Rep.').replace('Western Sahara','W. Sahara').replace('Equatorial Guinea','Eq. Guinea');
-    if(ext){const lx=ext[0]*(W/520),ly=ext[1]*(H/460);lg.append('line').attr('x1',c[0]).attr('y1',c[1]).attr('x2',lx<W/2?lx+5:lx-5).attr('y2',ly).attr('stroke',CL).attr('stroke-width',0.7).attr('stroke-dasharray','2,2');ll.append('text').attr('x',lx<W/2?lx-2:lx+2).attr('y',ly+3).attr('text-anchor',lx<W/2?'end':'start').attr('font-size',W>600?'8px':'6px').attr('font-family','DM Sans,sans-serif').attr('fill','#c8d8dc').attr('font-weight','500').text(disp);}
+    if(ext){const lx=c[0]+ext[0]*(W/520),ly=c[1]+ext[1]*(H/460);const leftSide=ext[0]<0;lg.append('line').attr('x1',c[0]).attr('y1',c[1]).attr('x2',lx).attr('y2',ly).attr('stroke',CL).attr('stroke-width',0.7).attr('stroke-dasharray','2,2');ll.append('text').attr('x',lx+(leftSide?-3:3)).attr('y',ly+3).attr('text-anchor',leftSide?'end':'start').attr('font-size',(W>600?8:6.5)+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#e8eef0').attr('font-weight','600').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.72)').attr('stroke-width','2.5px').text(disp);}
     else{if(area<70*(W/520)**2)return;const fs=area>3000*(W/520)**2?W>600?9:7:area>800*(W/520)**2?W>600?8:6.5:W>600?7:5.5;const words=disp.split(' ');if(words.length>=3&&area>1200*(W/520)**2){const mid=Math.ceil(words.length/2);[[words.slice(0,mid).join(' '),-4],[words.slice(mid).join(' '),8]].forEach(([t,dy])=>{ll.append('text').attr('x',c[0]).attr('y',c[1]+dy).attr('text-anchor','middle').attr('font-size',fs+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#fff').attr('font-weight','500').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.65)').attr('stroke-width','2px').text(t);})}else{ll.append('text').attr('x',c[0]).attr('y',c[1]+2).attr('text-anchor','middle').attr('font-size',fs+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#fff').attr('font-weight','500').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.65)').attr('stroke-width','2px').text(disp);}}
   });
   const ig=svg.append('g');
   africaIslands.forEach(isl=>{
-    const[px,py]=proj([isl.lon,isl.lat]);const col=CP;const lx=px+isl.dx*(W/520)*2,ly=py+isl.dy*(H/620)*1.4;
+    const[px,py]=proj([isl.lon,isl.lat]);const col=CP;const lx=px+isl.dx*(W/520),ly=py+isl.dy*(H/460);
     ig.append('circle').attr('cx',px).attr('cy',py).attr('r',W>600?5:3.5).attr('fill',col).attr('stroke','rgba(255,255,255,0.35)').attr('stroke-width',0.8).style('cursor','pointer').on('mousemove',e=>tip(e,isl.name,'Pending')).on('mouseleave',untip);
     ig.append('line').attr('x1',px).attr('y1',py).attr('x2',lx).attr('y2',ly).attr('stroke',CL).attr('stroke-width',0.6).attr('stroke-dasharray','2,2');
-    ig.append('text').attr('x',lx+(isl.anchor==='start'?2:-2)).attr('y',ly+3).attr('text-anchor',isl.anchor).attr('font-size',W>600?'8px':'6px').attr('font-family','DM Sans,sans-serif').attr('fill','#c8d8dc').attr('font-weight','500').text(isl.name);
+    ig.append('text').attr('x',lx+(isl.anchor==='start'?2:-2)).attr('y',ly+3).attr('text-anchor',isl.anchor).attr('font-size',(W>600?8:6.5)+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#e8eef0').attr('font-weight','600').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.72)').attr('stroke-width','2.5px').text(isl.name);
   });
   return svg;
 }
@@ -523,15 +528,15 @@ function buildAfricaResultsSVG(container, W, H) {
     const c=path.centroid(d);if(!c||isNaN(c[0]))return;
     const area=path.area(d);const ext=extA[n];
     const disp=n.replace('Congo (Brazzaville)','Congo-B').replace('DR Congo (Kinshasa)','DR Congo').replace('Central African Republic','Cent. African Rep.').replace('Western Sahara','W. Sahara').replace('Equatorial Guinea','Eq. Guinea');
-    if(ext){const lx=ext[0]*(W/520),ly=ext[1]*(H/460);lg.append('line').attr('x1',c[0]).attr('y1',c[1]).attr('x2',lx<W/2?lx+5:lx-5).attr('y2',ly).attr('stroke',CL).attr('stroke-width',0.7).attr('stroke-dasharray','2,2');ll.append('text').attr('x',lx<W/2?lx-2:lx+2).attr('y',ly+3).attr('text-anchor',lx<W/2?'end':'start').attr('font-size',Math.min(W*0.0077,9)+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#c8d8dc').attr('font-weight','500').text(disp);}
+    if(ext){const lx=c[0]+ext[0]*(W/520),ly=c[1]+ext[1]*(H/460);const leftSide=ext[0]<0;lg.append('line').attr('x1',c[0]).attr('y1',c[1]).attr('x2',lx).attr('y2',ly).attr('stroke',CL).attr('stroke-width',0.7).attr('stroke-dasharray','2,2');ll.append('text').attr('x',lx+(leftSide?-3:3)).attr('y',ly+3).attr('text-anchor',leftSide?'end':'start').attr('font-size',Math.min(W*0.0077,9)+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#e8eef0').attr('font-weight','600').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.72)').attr('stroke-width','2.5px').text(disp);}
     else{if(area<70*(W/520)**2)return;const fs=Math.min(area>3000*(W/520)**2?W*0.0094:area>800*(W/520)**2?W*0.0077:W*0.0068,area>3000*(W/520)**2?13:area>800*(W/520)**2?11:9);const words=disp.split(' ');if(words.length>=3&&area>1200*(W/520)**2){const mid=Math.ceil(words.length/2);[[words.slice(0,mid).join(' '),-4],[words.slice(mid).join(' '),8]].forEach(([t,dy])=>{ll.append('text').attr('x',c[0]).attr('y',c[1]+dy).attr('text-anchor','middle').attr('font-size',fs+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#fff').attr('font-weight','500').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.65)').attr('stroke-width','2px').text(t);})}else{ll.append('text').attr('x',c[0]).attr('y',c[1]+2).attr('text-anchor','middle').attr('font-size',fs+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#fff').attr('font-weight','500').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.65)').attr('stroke-width','2px').text(disp);}}
   });
   const ig=svg.append('g');
   africaIslands.forEach(isl=>{
-    const[px,py]=proj([isl.lon,isl.lat]);const col=heatColorFor(isl.name);const lx=px+isl.dx*(W/520)*2,ly=py+isl.dy*(H/620)*1.4;
+    const[px,py]=proj([isl.lon,isl.lat]);const col=heatColorFor(isl.name);const lx=px+isl.dx*(W/520),ly=py+isl.dy*(H/460);
     ig.append('circle').attr('cx',px).attr('cy',py).attr('r',W>600?5:3.5).attr('fill',col).attr('stroke','rgba(255,255,255,0.35)').attr('stroke-width',0.8).style('cursor','pointer').on('mousemove',e=>tip(e,isl.name,'Data Not Yet Available')).on('mouseleave',untip);
     ig.append('line').attr('x1',px).attr('y1',py).attr('x2',lx).attr('y2',ly).attr('stroke',CL).attr('stroke-width',0.6).attr('stroke-dasharray','2,2');
-    ig.append('text').attr('x',lx+(isl.anchor==='start'?2:-2)).attr('y',ly+3).attr('text-anchor',isl.anchor).attr('font-size',Math.min(W*0.0077,9)+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#c8d8dc').attr('font-weight','500').text(isl.name);
+    ig.append('text').attr('x',lx+(isl.anchor==='start'?2:-2)).attr('y',ly+3).attr('text-anchor',isl.anchor).attr('font-size',Math.min(W*0.0077,9)+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#e8eef0').attr('font-weight','600').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.72)').attr('stroke-width','2.5px').text(isl.name);
   });
   return svg;
 }
@@ -742,6 +747,9 @@ function showTab(id,btn){document.querySelectorAll('.cgrid').forEach(e=>e.classL
   applyInitialHash();
   // Show data-freshness line
   updateDataFreshness();
+  // Footer year
+  const fy = document.getElementById('footer-year');
+  if (fy) fy.textContent = new Date().getFullYear();
 })();
 
 /* ── DATA FRESHNESS ── */
