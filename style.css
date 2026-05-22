@@ -277,6 +277,19 @@ nav{position:fixed;top:34px;left:0;right:0;z-index:150;background:rgba(13,59,62,
 .data-freshness{color:rgba(232,223,200,0.4);font-size:12px;margin-top:10px;}
 .data-freshness:empty{display:none;}
 
+/* ── FOOTER ── */
+.site-footer{background:#08272a;border-top:1px solid rgba(168,224,74,0.18);color:rgba(232,223,200,0.75);}
+.footer-inner{max-width:1200px;margin:0 auto;padding:56px 80px 36px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;}
+.footer-brand{max-width:380px;}
+.footer-mark{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:12px;}
+.footer-brand p{font-size:13.5px;line-height:1.7;color:rgba(232,223,200,0.55);}
+.footer-col h4{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--lime);margin-bottom:16px;}
+.footer-col a{display:block;font-size:14px;color:rgba(232,223,200,0.7);text-decoration:none;padding:6px 0;transition:color 0.15s;cursor:pointer;}
+.footer-col a:hover{color:var(--lime);}
+.footer-bottom{max-width:1200px;margin:0 auto;padding:20px 80px;border-top:1px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-size:12.5px;color:rgba(232,223,200,0.4);}
+.footer-bottom-links a{color:rgba(232,223,200,0.55);text-decoration:none;}
+.footer-bottom-links a:hover{color:var(--lime);}
+
 /* Map preview loading skeleton */
 .map-skeleton{width:100%;height:240px;border-radius:8px;background:linear-gradient(100deg,rgba(255,255,255,0.03) 30%,rgba(255,255,255,0.08) 50%,rgba(255,255,255,0.03) 70%);background-size:200% 100%;animation:skeleton-shimmer 1.4s ease-in-out infinite;display:flex;align-items:center;justify-content:center;}
 .map-skeleton span{font-size:12px;color:rgba(255,255,255,0.3);font-weight:500;letter-spacing:0.06em;text-transform:uppercase;}
@@ -373,6 +386,11 @@ nav{position:fixed;top:34px;left:0;right:0;z-index:150;background:rgba(13,59,62,
   .afoot-card{padding:26px 22px;}
   .afoot-card h3{font-size:22px;}
 
+  /* Footer */
+  .footer-inner{grid-template-columns:1fr 1fr;gap:30px 24px;padding:40px 20px 28px;}
+  .footer-brand{grid-column:1 / -1;max-width:none;}
+  .footer-bottom{padding:18px 20px;flex-direction:column;align-items:flex-start;gap:8px;}
+
   /* Maps page */
   .maps-grid{grid-template-columns:1fr;gap:18px;margin-top:24px;}
   .mcard{padding:22px 20px;border-radius:16px;}
@@ -416,4 +434,5 @@ nav{position:fixed;top:34px;left:0;right:0;z-index:150;background:rgba(13,59,62,
   .nav-wordmark{display:none;}
   .hstat-n{font-size:24px;}
   .ac-search{font-size:13px;}
+  .footer-inner{grid-template-columns:1fr;}
 }
