@@ -394,16 +394,5 @@
     "deviceCenters": 7,
     "visitingEP": "Yes",
     "lastUpdated": "april 12,2026"
-  },
-  "Algeria": {
-    "pop": 56.4,
-    "ablatingEPs": 1,
-    "deviceEPs": 35,
-    "ablationRatio": "56.4M/EP",
-    "deviceRatio": "1.6M/EP",
-    "ablationCenters": 4,
-    "deviceCenters": 16,
-    "visitingEP": "Yes",
-    "lastUpdated": "May 22, 2026"
   }
 }
