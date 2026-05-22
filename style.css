@@ -260,12 +260,27 @@ nav{position:fixed;top:34px;left:0;right:0;z-index:150;background:rgba(13,59,62,
 .all-countries .cpill.cpill-hidden{display:none;}
 
 /* Heat-map legend (Results) */
-.heat-legend{display:flex;align-items:center;gap:14px;padding:10px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(168,224,74,0.18);border-radius:10px;margin:10px 0 4px;width:fit-content;}
+.results-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:10px 0 4px;}
+.heat-legend{display:flex;align-items:center;gap:14px;padding:10px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(168,224,74,0.18);border-radius:10px;width:fit-content;}
 .heat-legend-label{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.55);}
 .heat-legend-bar{width:160px;height:10px;border-radius:6px;background:linear-gradient(90deg,#f4dcd2,#e8826a,#a8312a,#5e1010);}
 .heat-legend-ticks{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,0.45);font-weight:500;margin-top:2px;}
 .heat-na{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,0.45);font-weight:500;}
 .heat-na-dot{width:10px;height:10px;border-radius:50%;background:#3a4d52;border:1px solid rgba(255,255,255,0.18);}
+
+/* CSV download button */
+.csv-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:100px;background:transparent;border:1px solid rgba(168,224,74,0.4);color:var(--lime);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.csv-btn:hover{background:rgba(168,224,74,0.12);border-color:var(--lime);}
+.csv-btn svg{width:15px;height:15px;}
+
+/* Data freshness line */
+.data-freshness{color:rgba(232,223,200,0.4);font-size:12px;margin-top:10px;}
+.data-freshness:empty{display:none;}
+
+/* Map preview loading skeleton */
+.map-skeleton{width:100%;height:240px;border-radius:8px;background:linear-gradient(100deg,rgba(255,255,255,0.03) 30%,rgba(255,255,255,0.08) 50%,rgba(255,255,255,0.03) 70%);background-size:200% 100%;animation:skeleton-shimmer 1.4s ease-in-out infinite;display:flex;align-items:center;justify-content:center;}
+.map-skeleton span{font-size:12px;color:rgba(255,255,255,0.3);font-weight:500;letter-spacing:0.06em;text-transform:uppercase;}
+@keyframes skeleton-shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
 
 /* ── MOBILE HAMBURGER TOGGLE (hidden on desktop) ── */
 .nav-toggle{display:none;background:transparent;border:none;cursor:pointer;width:44px;height:44px;padding:10px;flex-direction:column;justify-content:space-around;align-items:stretch;}

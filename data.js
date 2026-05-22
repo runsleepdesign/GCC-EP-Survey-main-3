@@ -1,12 +1,23 @@
 
-/* ── SECTION SWITCHING ── */
-function showSection(id) {
+/* ── SECTION SWITCHING + HASH ROUTING ── */
+const SECTION_SLUGS = { home:'home', about:'about', maps:'completion', results:'results' };
+const SLUG_SECTIONS = { home:'home', about:'about', completion:'maps', results:'results' };
+
+function showSection(id, fromHash) {
+  if (!document.getElementById('sec-' + id)) return;
   document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('sec-' + id).classList.add('active');
   const btns = document.querySelectorAll('.nav-btn');
   const idx = ['home','about','maps','results'].indexOf(id);
   if (idx >= 0) btns[idx].classList.add('active');
+  // Keep the URL hash in sync so pages are shareable / bookmarkable
+  if (!fromHash) {
+    const slug = SECTION_SLUGS[id] || id;
+    if (location.hash !== '#' + slug) {
+      history.pushState(null, '', '#' + slug);
+    }
+  }
   // Auto-close mobile menu after selection
   const links = document.getElementById('nav-links');
   if (links && links.classList.contains('open')) {
@@ -15,6 +26,16 @@ function showSection(id) {
     if (t) { t.classList.remove('open'); t.setAttribute('aria-expanded','false'); }
   }
   window.scrollTo(0,0);
+}
+
+// React to back/forward navigation and direct hash links
+window.addEventListener('hashchange', () => {
+  const id = SLUG_SECTIONS[location.hash.replace('#','')];
+  if (id) showSection(id, true);
+});
+function applyInitialHash() {
+  const id = SLUG_SECTIONS[location.hash.replace('#','')];
+  if (id) showSection(id, true);
 }
 
 /* ── MOBILE NAV TOGGLE ── */
@@ -260,7 +281,7 @@ function buildAfricaSVG(container, W, H) {
     const c=path.centroid(d);if(!c||isNaN(c[0]))return;
     const area=path.area(d);const ext=extA[n];
     const disp=n.replace('Congo (Brazzaville)','Congo-B').replace('DR Congo (Kinshasa)','DR Congo').replace('Central African Republic','Cent. African Rep.').replace('Western Sahara','W. Sahara').replace('Equatorial Guinea','Eq. Guinea');
-    if(ext){const[lx,ly]=ext;lg.append('line').attr('x1',c[0]).attr('y1',c[1]).attr('x2',lx<W/2?lx+5:lx-5).attr('y2',ly).attr('stroke',CL).attr('stroke-width',0.7).attr('stroke-dasharray','2,2');ll.append('text').attr('x',lx<W/2?lx-2:lx+2).attr('y',ly+3).attr('text-anchor',lx<W/2?'end':'start').attr('font-size',W>600?'8px':'6px').attr('font-family','DM Sans,sans-serif').attr('fill','#c8d8dc').attr('font-weight','500').text(disp);}
+    if(ext){const lx=ext[0]*(W/520),ly=ext[1]*(H/460);lg.append('line').attr('x1',c[0]).attr('y1',c[1]).attr('x2',lx<W/2?lx+5:lx-5).attr('y2',ly).attr('stroke',CL).attr('stroke-width',0.7).attr('stroke-dasharray','2,2');ll.append('text').attr('x',lx<W/2?lx-2:lx+2).attr('y',ly+3).attr('text-anchor',lx<W/2?'end':'start').attr('font-size',W>600?'8px':'6px').attr('font-family','DM Sans,sans-serif').attr('fill','#c8d8dc').attr('font-weight','500').text(disp);}
     else{if(area<70*(W/520)**2)return;const fs=area>3000*(W/520)**2?W>600?9:7:area>800*(W/520)**2?W>600?8:6.5:W>600?7:5.5;const words=disp.split(' ');if(words.length>=3&&area>1200*(W/520)**2){const mid=Math.ceil(words.length/2);[[words.slice(0,mid).join(' '),-4],[words.slice(mid).join(' '),8]].forEach(([t,dy])=>{ll.append('text').attr('x',c[0]).attr('y',c[1]+dy).attr('text-anchor','middle').attr('font-size',fs+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#fff').attr('font-weight','500').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.65)').attr('stroke-width','2px').text(t);})}else{ll.append('text').attr('x',c[0]).attr('y',c[1]+2).attr('text-anchor','middle').attr('font-size',fs+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#fff').attr('font-weight','500').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.65)').attr('stroke-width','2px').text(disp);}}
   });
   const ig=svg.append('g');
@@ -502,7 +523,7 @@ function buildAfricaResultsSVG(container, W, H) {
     const c=path.centroid(d);if(!c||isNaN(c[0]))return;
     const area=path.area(d);const ext=extA[n];
     const disp=n.replace('Congo (Brazzaville)','Congo-B').replace('DR Congo (Kinshasa)','DR Congo').replace('Central African Republic','Cent. African Rep.').replace('Western Sahara','W. Sahara').replace('Equatorial Guinea','Eq. Guinea');
-    if(ext){const[lx,ly]=ext;lg.append('line').attr('x1',c[0]).attr('y1',c[1]).attr('x2',lx<W/2?lx+5:lx-5).attr('y2',ly).attr('stroke',CL).attr('stroke-width',0.7).attr('stroke-dasharray','2,2');ll.append('text').attr('x',lx<W/2?lx-2:lx+2).attr('y',ly+3).attr('text-anchor',lx<W/2?'end':'start').attr('font-size',Math.min(W*0.0077,9)+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#c8d8dc').attr('font-weight','500').text(disp);}
+    if(ext){const lx=ext[0]*(W/520),ly=ext[1]*(H/460);lg.append('line').attr('x1',c[0]).attr('y1',c[1]).attr('x2',lx<W/2?lx+5:lx-5).attr('y2',ly).attr('stroke',CL).attr('stroke-width',0.7).attr('stroke-dasharray','2,2');ll.append('text').attr('x',lx<W/2?lx-2:lx+2).attr('y',ly+3).attr('text-anchor',lx<W/2?'end':'start').attr('font-size',Math.min(W*0.0077,9)+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#c8d8dc').attr('font-weight','500').text(disp);}
     else{if(area<70*(W/520)**2)return;const fs=Math.min(area>3000*(W/520)**2?W*0.0094:area>800*(W/520)**2?W*0.0077:W*0.0068,area>3000*(W/520)**2?13:area>800*(W/520)**2?11:9);const words=disp.split(' ');if(words.length>=3&&area>1200*(W/520)**2){const mid=Math.ceil(words.length/2);[[words.slice(0,mid).join(' '),-4],[words.slice(mid).join(' '),8]].forEach(([t,dy])=>{ll.append('text').attr('x',c[0]).attr('y',c[1]+dy).attr('text-anchor','middle').attr('font-size',fs+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#fff').attr('font-weight','500').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.65)').attr('stroke-width','2px').text(t);})}else{ll.append('text').attr('x',c[0]).attr('y',c[1]+2).attr('text-anchor','middle').attr('font-size',fs+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#fff').attr('font-weight','500').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.65)').attr('stroke-width','2px').text(disp);}}
   });
   const ig=svg.append('g');
@@ -699,17 +720,72 @@ function showTab(id,btn){document.querySelectorAll('.cgrid').forEach(e=>e.classL
       worldData = world;
       const isMobile = window.matchMedia('(max-width:768px)').matches;
       const previewH = isMobile ? 280 : 460;
-      try { buildAfricaSVG('#africa-map-preview', 520, previewH); } catch(e){ console.warn('Africa preview failed', e); }
-      try { buildSEASVG('#sea-map-preview', 520, previewH); } catch(e){ console.warn('SEA preview failed', e); }
-      try { buildAfricaResultsSVG('#africa-results-preview', 520, previewH); } catch(e){ console.warn('Africa results preview failed', e); }
-      try { buildSEAResultsSVG('#sea-results-preview', 520, previewH); } catch(e){ console.warn('SEA results preview failed', e); }
+      const buildPreview = (fn, sel) => {
+        try {
+          const c = document.querySelector(sel);
+          if (c) c.innerHTML = '';   // remove loading skeleton
+          fn(sel, 520, previewH);
+        } catch(e){ console.warn(sel + ' preview failed', e); }
+      };
+      buildPreview(buildAfricaSVG, '#africa-map-preview');
+      buildPreview(buildSEASVG, '#sea-map-preview');
+      buildPreview(buildAfricaResultsSVG, '#africa-results-preview');
+      buildPreview(buildSEAResultsSVG, '#sea-results-preview');
     } catch (err) {
       console.warn('World data load failed:', err);
     }
   } else {
     console.warn('d3 not loaded; map previews skipped');
   }
+
+  // Honor a direct #hash link (e.g. shared /#results URL)
+  applyInitialHash();
+  // Show data-freshness line
+  updateDataFreshness();
 })();
+
+/* ── DATA FRESHNESS ── */
+function updateDataFreshness() {
+  const el = document.getElementById('data-freshness');
+  if (!el) return;
+  let newest = null;
+  Object.values(countryEPData).forEach(d => {
+    if (!d || !d.lastUpdated) return;
+    const t = Date.parse(d.lastUpdated);
+    if (!isNaN(t) && (newest === null || t > newest)) newest = t;
+  });
+  if (newest === null) { el.textContent = ''; return; }
+  const dstr = new Date(newest).toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
+  el.textContent = 'Data updates automatically as new survey responses are entered \u00b7 most recent update: ' + dstr;
+}
+
+/* ── CSV EXPORT ── */
+function downloadCSV() {
+  const cols = ['Country','Region','Status','Population (M)','Ablating EPs','Device EPs','Ablation ratio','Device ratio','Ablation centers','Device centers','Visiting EP','Last updated'];
+  const rows = [cols];
+  const emit = (name, region) => {
+    const d = countryEPData[name];
+    if (d) {
+      rows.push([name, region, 'Complete', d.pop, d.ablatingEPs, d.deviceEPs, d.ablationRatio, d.deviceRatio, d.ablationCenters, d.deviceCenters, d.visitingEP, d.lastUpdated]);
+    } else {
+      rows.push([name, region, 'Pending', '', '', '', '', '', '', '', '', '']);
+    }
+  };
+  AFRICA_COUNTRIES.forEach(n => emit(n, 'Africa'));
+  SEA_COUNTRIES.forEach(n => emit(n, 'Southeast Asia'));
+  const esc = v => {
+    const s = String(v == null ? '' : v);
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  };
+  const csv = rows.map(r => r.map(esc).join(',')).join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'gcc-ep-survey-data.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 function openLightbox(img) {
   const lb = document.getElementById('lightbox');

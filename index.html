@@ -4,6 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GCC Global EP Capacity Survey — MSERF</title>
+<meta name="description" content="Mapping electrophysiology infrastructure, training, and access across Africa and Southeast Asia — a partnership between the Melvin Scheinman Foundation and the Global Cardiovascular Collaborative.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<!-- Open Graph / social share -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Global EP Capacity Survey">
+<meta property="og:description" content="Mapping electrophysiology infrastructure, training, and access across Africa and Southeast Asia.">
+<meta property="og:url" content="https://eberswine.github.io/GCC-EP-Survey-main-3/">
+<meta property="og:image" content="https://eberswine.github.io/GCC-EP-Survey-main-3/ep_capacity_gap.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Global EP Capacity Survey">
+<meta name="twitter:description" content="Mapping electrophysiology infrastructure, training, and access across Africa and Southeast Asia.">
+<meta name="twitter:image" content="https://eberswine.github.io/GCC-EP-Survey-main-3/ep_capacity_gap.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -145,7 +157,7 @@
           <div class="mleg-item"><div class="mleg-dot" style="background:#5a9e2f"></div><span id="leg-af-c">Complete (31)</span></div>
           <div class="mleg-item"><div class="mleg-dot" style="background:#c0392b"></div><span id="leg-af-p">Pending (24)</span></div>
         </div>
-        <div id="africa-map-preview"></div>
+        <div id="africa-map-preview"><div class="map-skeleton"><span>Loading map…</span></div></div>
         <div class="expand-hint">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
           Click to enlarge &amp; interact
@@ -159,7 +171,7 @@
           <div class="mleg-item"><div class="mleg-dot" style="background:#5a9e2f"></div><span id="leg-sea-c">Complete (1)</span></div>
           <div class="mleg-item"><div class="mleg-dot" style="background:#c0392b"></div><span id="leg-sea-p">Pending (4)</span></div>
         </div>
-        <div id="sea-map-preview"></div>
+        <div id="sea-map-preview"><div class="map-skeleton"><span>Loading map…</span></div></div>
         <div class="expand-hint">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
           Click to enlarge &amp; interact
@@ -191,19 +203,26 @@
     <div class="sec-eyebrow" style="color:var(--lime);margin-top:24px;">Data & Analysis</div>
     <h2 class="sec-title" style="color:var(--white)">Survey Results</h2>
     <p style="color:rgba(232,223,200,0.55);font-size:15px;margin-top:4px;">Click either map to enlarge and interact.</p>
-    <div class="heat-legend" title="Color encodes ablating EPs per million population for surveyed countries">
-      <span class="heat-legend-label">Capacity gap</span>
-      <div>
-        <div class="heat-legend-bar"></div>
-        <div class="heat-legend-ticks"><span>Greater capacity</span><span>Larger gap</span></div>
+    <div class="results-toolbar">
+      <div class="heat-legend" title="Color encodes ablating EPs per million population for surveyed countries">
+        <span class="heat-legend-label">Capacity gap</span>
+        <div>
+          <div class="heat-legend-bar"></div>
+          <div class="heat-legend-ticks"><span>Greater capacity</span><span>Larger gap</span></div>
+        </div>
+        <span class="heat-na"><span class="heat-na-dot"></span>Not yet surveyed</span>
       </div>
-      <span class="heat-na"><span class="heat-na-dot"></span>Not yet surveyed</span>
+      <button class="csv-btn" onclick="downloadCSV()" title="Download all survey data as a spreadsheet">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Download data (CSV)
+      </button>
     </div>
+    <p class="data-freshness" id="data-freshness"></p>
     <div class="maps-grid">
       <div class="mcard" onclick="openResultsModal('africa')">
         <div class="mcard-hdr"><div class="mcard-title">Africa</div></div>
         <div style="font-size:12px;color:rgba(255,255,255,0.38);margin-bottom:10px;" id="results-af-count">31 of 55 countries surveyed</div>
-        <div id="africa-results-preview"></div>
+        <div id="africa-results-preview"><div class="map-skeleton"><span>Loading map…</span></div></div>
         <div class="expand-hint">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
           Click to enlarge &amp; interact
@@ -212,7 +231,7 @@
       <div class="mcard" onclick="openResultsModal('sea')">
         <div class="mcard-hdr"><div class="mcard-title">Southeast Asia &amp; Mongolia</div></div>
         <div style="font-size:12px;color:rgba(255,255,255,0.38);margin-bottom:10px;" id="results-sea-count">2 of 6 countries surveyed</div>
-        <div id="sea-results-preview"></div>
+        <div id="sea-results-preview"><div class="map-skeleton"><span>Loading map…</span></div></div>
         <div class="expand-hint">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
           Click to enlarge &amp; interact
