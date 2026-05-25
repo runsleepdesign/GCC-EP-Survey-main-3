@@ -374,14 +374,14 @@
     "lastUpdated": "Apr 7, 2026"
   },
   "South Africa": {
-    "pop": 65.5,
-    "ablatingEPs": 15,
-    "deviceEPs": 19,
-    "ablationRatio": "4.4M/EP",
-    "deviceRatio": "3.4M/EP",
-    "ablationCenters": 7,
-    "deviceCenters": 24,
-    "visitingEP": "Yes",
+    "pop": 64,
+    "ablatingEPs": 16,
+    "deviceEPs": 200,
+    "ablationRatio": "4.0M/EP",
+    "deviceRatio": "0.3M/EP",
+    "ablationCenters": 16,
+    "deviceCenters": 62,
+    "visitingEP": "No",
     "lastUpdated": "april 8, 2026"
   },
   "Myanmar": {
