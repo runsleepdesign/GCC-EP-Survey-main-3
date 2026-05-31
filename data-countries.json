@@ -394,5 +394,16 @@
     "deviceCenters": 7,
     "visitingEP": "Yes",
     "lastUpdated": "april 12,2026"
+  },
+  "Mauritius": {
+    "pop": 1.3,
+    "ablatingEPs": 0,
+    "deviceEPs": 0,
+    "ablationRatio": "N/A",
+    "deviceRatio": "N/A",
+    "ablationCenters": 0,
+    "deviceCenters": 0,
+    "visitingEP": "Yes",
+    "lastUpdated": "May 31, 2026"
   }
 }
