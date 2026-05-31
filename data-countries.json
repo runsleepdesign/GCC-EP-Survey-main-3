@@ -341,13 +341,13 @@
     "lastUpdated": "Apr 7, 2026"
   },
   "Vietnam": {
-    "pop": 98,
-    "ablatingEPs": 15,
-    "deviceEPs": 30,
-    "ablationRatio": "6.5M/EP",
-    "deviceRatio": "3.3M/EP",
-    "ablationCenters": 11,
-    "deviceCenters": 6,
+    "pop": 100,
+    "ablatingEPs": 36,
+    "deviceEPs": 70,
+    "ablationRatio": "2.8M/EP",
+    "deviceRatio": "1.4M/EP",
+    "ablationCenters": 42,
+    "deviceCenters": 70,
     "visitingEP": "Yes",
     "lastUpdated": "Apr 7, 2026"
   },
