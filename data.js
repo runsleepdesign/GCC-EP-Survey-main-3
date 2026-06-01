@@ -525,7 +525,7 @@ function buildAfricaResultsSVG(container, W, H) {
   const ig=svg.append('g');
   africaIslands.forEach(isl=>{
     const[px,py]=proj([isl.lon,isl.lat]);const col=heatColorFor(isl.name);const lx=px+isl.dx*(W/520),ly=py+isl.dy*(H/460);
-    ig.append('circle').attr('cx',px).attr('cy',py).attr('r',W>600?5:3.5).attr('fill',col).attr('stroke','rgba(255,255,255,0.35)').attr('stroke-width',0.8).style('cursor','pointer').on('mousemove',e=>tip(e,isl.name,'Data Not Yet Available')).on('mouseleave',untip);
+    ig.append('circle').attr('cx',px).attr('cy',py).attr('r',W>600?5:3.5).attr('fill',col).attr('stroke','rgba(255,255,255,0.35)').attr('stroke-width',0.8).style('cursor','pointer').on('mousemove',e=>tip(e,isl.name,getCountryTip(isl.name))).on('mouseleave',untip);
     ig.append('line').attr('x1',px).attr('y1',py).attr('x2',lx).attr('y2',ly).attr('stroke',CL).attr('stroke-width',0.6).attr('stroke-dasharray','2,2');
     ig.append('text').attr('x',lx+(isl.anchor==='start'?2:-2)).attr('y',ly+3).attr('text-anchor',isl.anchor).attr('font-size',Math.min(W*0.0077,9)+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#e8eef0').attr('font-weight','600').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.72)').attr('stroke-width','2.5px').text(isl.name);
   });
