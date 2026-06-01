@@ -256,7 +256,7 @@ const extA={
   'Gambia':[-40,-7],'Guinea-Bissau':[-44,3],'Sierra Leone':[-40,11],'Liberia':[-32,24],
   'Equatorial Guinea':[-42,15],
   'Togo':[-7,33],'Benin':[13,29],
-  'Rwanda':[-38,-6],'Burundi':[-38,11],
+  'Rwanda':[40,-4],'Burundi':[-38,11],
   'Djibouti':[38,-3],'Eritrea':[40,-14],
   'Lesotho':[26,19],'Eswatini':[39,3]
 };
@@ -291,8 +291,8 @@ function buildAfricaSVG(container, W, H) {
   });
   const ig=svg.append('g');
   africaIslands.forEach(isl=>{
-    const[px,py]=proj([isl.lon,isl.lat]);const col=CP;const lx=px+isl.dx*(W/520),ly=py+isl.dy*(H/460);
-    ig.append('circle').attr('cx',px).attr('cy',py).attr('r',W>600?5:3.5).attr('fill',col).attr('stroke','rgba(255,255,255,0.35)').attr('stroke-width',0.8).style('cursor','pointer').on('mousemove',e=>tip(e,isl.name,'Pending')).on('mouseleave',untip);
+    const[px,py]=proj([isl.lon,isl.lat]);const col=africaComplete.has(isl.name)?CC:CP;const lx=px+isl.dx*(W/520),ly=py+isl.dy*(H/460);
+    ig.append('circle').attr('cx',px).attr('cy',py).attr('r',W>600?5:3.5).attr('fill',col).attr('stroke','rgba(255,255,255,0.35)').attr('stroke-width',0.8).style('cursor','pointer').on('mousemove',e=>tip(e,isl.name,africaComplete.has(isl.name)?'Complete':'Pending')).on('mouseleave',untip);
     ig.append('line').attr('x1',px).attr('y1',py).attr('x2',lx).attr('y2',ly).attr('stroke',CL).attr('stroke-width',0.6).attr('stroke-dasharray','2,2');
     ig.append('text').attr('x',lx+(isl.anchor==='start'?2:-2)).attr('y',ly+3).attr('text-anchor',isl.anchor).attr('font-size',(W>600?8:6.5)+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#e8eef0').attr('font-weight','600').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.72)').attr('stroke-width','2.5px').text(isl.name);
   });
@@ -345,11 +345,7 @@ function buildSEASVG(container, W, H) {
   const mX = W * 0.58;
   const mY = H * 0.04;
 
-  // Inset background + border
-  svg.append('rect').attr('x',mX-8).attr('y',mY-8).attr('width',mW+16).attr('height',mH+16)
-    .attr('rx',8).attr('fill','rgba(13,59,62,0.85)').attr('stroke','rgba(168,224,74,0.2)').attr('stroke-width',1);
-
-  // Mongolia projection fitted to inset box
+  // Mongolia projection fitted to (former) inset area
   const mongFeature = topojson.feature(worldData,worldData.objects.countries).features.find(d=>+d.id===496);
   if(mongFeature){
     const mongProj = d3.geoMercator().fitExtent([[mX,mY],[mX+mW,mY+mH]], mongFeature);
@@ -372,11 +368,6 @@ function buildSEASVG(container, W, H) {
       .attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.65)').attr('stroke-width','2px')
       .text('Mongolia');
   }
-
-  // Inset label
-  svg.append('text').attr('x',mX-4).attr('y',mY-14).attr('font-size','9px')
-    .attr('font-family','DM Sans,sans-serif').attr('fill','rgba(255,255,255,0.35)')
-    .attr('font-weight','600').attr('letter-spacing','0.08em').text('INSET');
 
   return svg;
 }
@@ -562,7 +553,6 @@ function buildSEAResultsSVG(container, W, H) {
   sea.forEach(d=>{const n=getSN(+d.id);if(!n)return;const c=path.centroid(d);if(!c||isNaN(c[0]))return;const area=path.area(d);if(area<80)return;const fs=Math.min(area>8000?W*0.024:area>2000?W*0.021:W*0.018, area>8000?14:area>2000?12:10);ll.append('text').attr('x',c[0]).attr('y',c[1]+2).attr('text-anchor','middle').attr('font-size',fs+'px').attr('font-family','DM Sans,sans-serif').attr('fill','#fff').attr('font-weight','500').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.65)').attr('stroke-width','2.5px').text(n);});
   // Mongolia inset
   const mW=W*0.38,mH=H*0.18,mX=W*0.58,mY=H*0.04;
-  svg.append('rect').attr('x',mX-8).attr('y',mY-8).attr('width',mW+16).attr('height',mH+16).attr('rx',8).attr('fill','rgba(13,59,62,0.85)').attr('stroke','rgba(168,224,74,0.2)').attr('stroke-width',1);
   const mongFeature=topojson.feature(worldData,worldData.objects.countries).features.find(d=>+d.id===496);
   if(mongFeature){
     const mongProj=d3.geoMercator().fitExtent([[mX,mY],[mX+mW,mY+mH]],mongFeature);
@@ -571,7 +561,6 @@ function buildSEAResultsSVG(container, W, H) {
     const mc=mongPath.centroid(mongFeature);
     svg.append('text').attr('x',mc[0]).attr('y',mc[1]+2).attr('text-anchor','middle').attr('font-size',W>600?'11px':'8px').attr('font-family','DM Sans,sans-serif').attr('fill','#fff').attr('font-weight','500').attr('paint-order','stroke').attr('stroke','rgba(0,0,0,0.65)').attr('stroke-width','2px').text('Mongolia');
   }
-  svg.append('text').attr('x',mX-4).attr('y',mY-14).attr('font-size','9px').attr('font-family','DM Sans,sans-serif').attr('fill','rgba(255,255,255,0.35)').attr('font-weight','600').attr('letter-spacing','0.08em').text('INSET');
   return svg;
 }
 
@@ -701,7 +690,7 @@ function showTab(id,btn){document.querySelectorAll('.cgrid').forEach(e=>e.classL
 /* ── BOOT: load country data, derive sets, then build everything ── */
 (async function init() {
   try {
-    const r = await fetch('./data-countries.json?v=' + Date.now());
+    const r = await fetch('./data-countries.json?v=' + Date.now(), { cache: 'no-store' });
     if (!r.ok) throw new Error('HTTP ' + r.status);
     countryEPData = await r.json();
   } catch (e) {
