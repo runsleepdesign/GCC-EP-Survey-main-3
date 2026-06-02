@@ -51,10 +51,8 @@ Blocks marked with `mc:edit` are editable directly in Mailchimp's visual builder
 can duplicate it to add more stories.
 
 ### Images
-- The masthead pulls the logo from
-  `https://www.gunnisondemocrats.org/wp-content/uploads//logo-full-tr.png`.
-  For best deliverability, **re-upload the logo to Mailchimp's Content Studio** and point
-  the `<img src>` at the Mailchimp-hosted URL.
+- The masthead logo is already hosted on Mailchimp's CDN
+  (`mcusercontent.com/.../b7f95ea7-...png`), which is ideal for deliverability.
 - Article/lead photos currently use gray `placeholder` images — replace them with real photos
   (recommended widths: lead **552px**, article thumbnails **264px**).
 
