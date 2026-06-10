@@ -6,7 +6,7 @@
  *
  * Required secrets (set in Cloudflare dashboard → Worker → Settings → Variables):
  *   GH_TOKEN        Fine-grained PAT scoped to this repo, Contents: Read & Write
- *   REPO            "eberswine/GCC-EP-Survey-main-3"
+ *   REPO            "runsleepdesign/GCC-EP-Survey-main-3"
  *   ADMIN_PASSWORD  Shared password the admin enters in admin.html
  *
  * Endpoints (all CORS-enabled):
